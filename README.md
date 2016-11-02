@@ -1,12 +1,12 @@
-# Hacky GCS webapp
+# hackyGCS
 
-Adapted from here: https://github.com/fullstackreact/food-lookup-demo
+A hacked together GCS, mostly an excuse for me to learn about mavlink
 
 ## Running locally
 
 ```
-git clone git@github.com:fullstackreact/food-lookup-demo.git
-cd food-lookup-demo
+git clone git@github.com:Stonelinks/hackyGCS.git
+cd hackyGCS
 npm i
 
 cd client
@@ -19,6 +19,20 @@ npm run dev
 **Important**: **`npm start`** is intended for production only. Use `npm run dev`.
 
 ## Overview
+
+### Sim
+
+The `sim` folder contains simulation utilities to get this talking to a virtual aircraft quickly. It has its own README.
+
+### Server
+
+For now, the server is mainly a websocket proxy between mavlink and the browser.
+
+### Client
+
+User-facing interface.
+
+## Here is some crud that was already in this README:
 
 `create-react-app` configures a Webpack development server to run on `localhost:3000`. This development server will bundle all static assets located under `client/src/`. All requests to `localhost:3000` will serve `client/index.html` which will include Webpack's `bundle.js`.
 

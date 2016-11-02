@@ -13,7 +13,7 @@ class App extends Component {
     super()
     this.state = {
       time_boot_ms: 0,
-      stripchartLimit: 100,
+      stripchartLimit: 350,
       pitch: [0],
       pitchspeed: [0],
       roll: [0],
@@ -50,7 +50,7 @@ class App extends Component {
           <div key={k}>
             <code>{k}: {stateItem[stateItem.length - 1]}</code>
             <Sparklines data={stateItem} limit={this.state.stripchartLimit} width={1000} height={70} margin={5}>
-    <SparklinesLine  />
+              <SparklinesLine color="black" />
             </Sparklines>
           </div>
         ))

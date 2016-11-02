@@ -38,7 +38,11 @@ var webSocketServer = new WebSocketServer(webSocketServerOptions);
 // Broadcast to all.
 webSocketServer.broadcast = function(data) {
   webSocketServer.clients.forEach(function each(client) {
-    client.send(data);
+    try {
+      client.send(data);
+    } catch (e) {
+      // pass
+    }
   });
 };
 

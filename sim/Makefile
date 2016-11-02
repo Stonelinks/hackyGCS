@@ -1,5 +1,6 @@
 PX4_DIR := PX4
 PX4_GIT := git@github.com:PX4/Firmware.git
+PX4_BRANCH := stable
 
 # SIM_TARGET := gazebo
 SIM_TARGET := jmavsim
@@ -14,13 +15,12 @@ clean:
 	make clean
 
 fetch:
-	if [ -d ${PX4_DIR} ]; then \
-		cd ${PX4_DIR} && \
-		git pull origin master; \
-	else \
+	if [ ! -d ${PX4_DIR} ]; then \
 		git clone ${PX4_GIT} ${PX4_DIR}; \
 	fi
 	cd ${PX4_DIR} && \
+	git checkout ${PX4_BRANCH} && \
+	git pull origin ${PX4_BRANCH} && \
 	git submodule update --init --recursive
 
 sim:
