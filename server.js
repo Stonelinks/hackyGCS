@@ -36,7 +36,7 @@ if (process.env.REACT_APP_WSS_PORT) {
 var webSocketServer = new WebSocketServer(webSocketServerOptions);
 
 // Broadcast to all.
-webSocketServer.broadcast = function(data) {
+webSocketServer.broadcast = function (data) {
   webSocketServer.clients.forEach(function each(client) {
     try {
       client.send(data);
@@ -59,6 +59,8 @@ var myMAV = new mavlink(1, 1);
 const dgram = require('dgram');
 const mavSimServer = dgram.createSocket('udp4');
 const QGC_UDP_LOCAL_PORT = 14550
+const MESSAGES_TO_SEND = ['ATTITUDE']
+
 
 myMAV.on("ready", function () {
   console.log('mavlink connected')
@@ -82,15 +84,15 @@ myMAV.on("ready", function () {
     console.log(`webServer at http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
   });
 
-  // myMAV.on("message", function (message) {
-  //   console.log(message);
-  // });
-
-  myMAV.on("ATTITUDE", _.throttle(function (message, fields) {
-    console.log(fields);
-    webSocketServer.broadcast(JSON.stringify(fields))
-  }, 50));
+  // var messagesToThrottle = ["ATTITUDE"]
+  MESSAGES_TO_SEND.forEach((messageName) => {
+    myMAV.on(messageName, function (message, fields) {
+      webSocketServer.broadcast(JSON.stringify({
+        type: messageName,
+        data: fields
+      }))
+    })
+  })
 
   mavSimServer.bind(QGC_UDP_LOCAL_PORT);
-
 });

@@ -25,19 +25,21 @@ class App extends Component {
 
   componentDidMount() {
     client.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      const newState = _.clone(this.state)
-      for (var k in this.state) {
-        var stateItem = this.state[k]
-        if (_.isArray(stateItem)) {
-          stateItem.push(data[k])
-          if (stateItem.length > this.state.stripchartLimit) {
-            stateItem.shift()
+      const message = JSON.parse(event.data)
+      if (message.type === "ATTITUDE") {
+        const newState = _.clone(this.state)
+        for (var k in this.state) {
+          var stateItem = this.state[k]
+          if (_.isArray(stateItem)) {
+            stateItem.push(message.data[k])
+            if (stateItem.length > this.state.stripchartLimit) {
+              stateItem.shift()
+            }
+            newState[k] = stateItem
           }
-          newState[k] = stateItem
         }
+        this.setState(newState)
       }
-      this.setState(newState)
     }
   }
 
