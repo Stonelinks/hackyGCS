@@ -1,18 +1,25 @@
 PX4_DIR := PX4
 PX4_GIT := git@github.com:PX4/Firmware.git
-PX4_BRANCH := stable
+PX4_BRANCH := master
+PX4_DOCKER := px4io/px4-dev
+PX4_CONTAINER_NAME := px4-sim
 
 # SIM_TARGET := gazebo
 SIM_TARGET := jmavsim
 
-.PHONY: clean fetch sim
+UNAME := $(shell uname)
 
-all: sim
+.PHONY: clean kill-containers fetch sim
 
-clean:
+all: fetch sim
+
+clean: kill-containers
 	cd ${PX4_DIR} && \
-	git reset --hard HEAD && \
-	make clean
+	git reset --hard HEAD
+
+kill-containers:
+	docker stop ${PX4_CONTAINER_NAME} 2>/dev/null; true
+	docker rm ${PX4_CONTAINER_NAME} 2>/dev/null; true
 
 fetch:
 	if [ ! -d ${PX4_DIR} ]; then \
@@ -23,6 +30,20 @@ fetch:
 	git pull origin ${PX4_BRANCH} && \
 	git submodule update --init --recursive
 
-sim:
-	cd ${PX4_DIR} && \
-	${MAKE} posix_sitl_default ${SIM_TARGET}
+sim: kill-containers
+	if [ ${UNAME} = Darwin ]; then \
+		IP_ADDR=$(shell ifconfig en0 | grep inet | awk '$$1=="inet" {print $$2}'); \
+	else \
+		echo "to be implemented"; \
+	fi; \
+	xhost + $$IP_ADDR; \
+	docker run -it --privileged \
+		-v "$(shell pwd)/${PX4_DIR}":/${PX4_DIR}:rw \
+		-v /tmp/.X11-unix:/tmp/.X11-unix:ro \
+		-e JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8 \
+		-e DISPLAY="$$IP_ADDR:0" \
+		-p 14556:14556/udp \
+		-p 14550:14550/udp \
+		--name=${PX4_CONTAINER_NAME} \
+		${PX4_DOCKER} \
+		bash -c "cd /${PX4_DIR}; make posix_sitl_default ${SIM_TARGET}"

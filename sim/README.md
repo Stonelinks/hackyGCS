@@ -1,39 +1,51 @@
 # Simulation Utilities
 
-## PX4
+This is a Makefile that allows easy interaction of the PX4 software sim via docker.
 
-### Setup
+## Setup
 
-#### OS X only
+Make sure you have docker installed for your platform
+
+### OS X
+
+**XQuartz**
+
+You need to install and start [XQuartz](https://www.xquartz.org/). This is so it is possible to use the sim's GUI from the container.
 
 ```sh
-brew update
-brew cask install java
-brew install cmake ant
+brew cask install xquartz
 ```
-#### All platforms
 
-Open up a new terminal (to get outside of any venv) and run
+After installing XQuartz, log out and back in to OS X.
+
+Run XQuartz in e.g. bash:
+
 ```sh
-pip install empy catkin_pkg
+open -a XQuartz
 ```
 
-#### Fetch the sim
+In the XQuartz preferences, go to the “Security” tab and make sure you’ve got “Allow connections from network clients” ticked
+
+## Fetch / update PX4
 ```sh
 make fetch
 ```
 
-#### Build and Run the sim
+## Build and run the sim
+
+This will start PX4 and the sim in the container and connect to a local X session. For more info, read [this](http://dev.px4.io/advanced-docker.html).
 ```sh
 make sim
 ```
 
-#### If you run into problems
+## If your container gets stuck
+```sh
+make kill-containers
+```
+
+## If you want to rebuild or run into problems
 ```sh
 make clean
 ```
 
 The PX4 docs are also a great resource: http://dev.px4.io/starting-installing.html
-
-#### Future work
-- Get this to work with PX4's docker containers: http://dev.px4.io/advanced-docker.html
