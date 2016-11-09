@@ -16,15 +16,13 @@ You need to install and start [XQuartz](https://www.xquartz.org/). This is so it
 brew cask install xquartz
 ```
 
-After installing XQuartz, log out and back in to OS X.
-
-Run XQuartz in e.g. bash:
-
+Some default settings need to be changed
 ```sh
-open -a XQuartz
+defaults write org.macosforge.xquartz.X11 enable_iglx -bool true
+defaults write org.macosforge.xquartz.X11 nolisten_tcp -bool false
 ```
 
-In the XQuartz preferences, go to the “Security” tab and make sure you’ve got “Allow connections from network clients” ticked
+Now log out and back in to OS X.
 
 ## Fetch / update PX4
 ```sh
