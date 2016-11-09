@@ -33,15 +33,17 @@ fetch:
 sim: kill-containers
 	if [ ${UNAME} = Darwin ]; then \
 		IP_ADDR=$(shell ifconfig en0 | grep inet | awk '$$1=="inet" {print $$2}'); \
+		xhost + $$IP_ADDR; \
+		SIM_DISPLAY="$$IP_ADDR:0"; \
 	else \
-		echo "to be implemented"; \
+		xhost +; \
+		SIM_DISPLAY=$$DISPLAY; \
 	fi; \
-	xhost + $$IP_ADDR; \
 	docker run -it --privileged \
 		-v "$(shell pwd)/${PX4_DIR}":/${PX4_DIR}:rw \
 		-v /tmp/.X11-unix:/tmp/.X11-unix:ro \
 		-e JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8 \
-		-e DISPLAY="$$IP_ADDR:0" \
+		-e DISPLAY=$$SIM_DISPLAY \
 		-p 14556:14556/udp \
 		-p 14550:14550/udp \
 		--name=${PX4_CONTAINER_NAME} \
