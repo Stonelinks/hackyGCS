@@ -5,13 +5,14 @@ PX4_BRANCH := master
 # PX4_BRANCH := jMAVSim-fork
 PX4_DOCKER := px4io/px4-dev
 PX4_CONTAINER_NAME := px4-sim
+PX4_DOCKER := stonelinks/px4-sim-udp-proxy
 
 # SIM_TARGET := gazebo # not supported when running in a container
 SIM_TARGET := jmavsim
 
 UNAME := $(shell uname)
 
-.PHONY: clean kill-containers fetch sim
+.PHONY: clean kill-containers fetch sim sim-local push-image
 
 all: fetch sim
 
@@ -58,7 +59,11 @@ sim: kill-containers
 		-p 14560:14560/udp \
 		--name=${PX4_CONTAINER_NAME} \
 		${PX4_DOCKER} \
-		bash -c "apt install -y socat; socat UDP4-RECVFROM:14550,fork UDP4-SENDTO:$$IP_ADDR:14550"
+		bash -c "socat UDP4-RECVFROM:14550,fork UDP4-SENDTO:$$IP_ADDR:14550"
 	docker exec -it \
 		${PX4_CONTAINER_NAME} \
 		bash -c "cd /${PX4_DIR}; make posix_sitl_default ${SIM_TARGET}"
+
+push-image: kill-containers
+	docker build -t ${PX4_DOCKER} -f ./Dockerfile .
+	docker push ${PX4_DOCKER}
