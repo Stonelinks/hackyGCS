@@ -19,20 +19,22 @@ import { connect } from 'react-redux'
 // })
 
 import React, { PropTypes } from 'react'
-import Todo from './Todo'
+// import Todo from './Todo'
 
 const STRIPCHART_LIMIT = 350
 
 const Stripchart = ({ name, data }) => (
-  <code>{name}: {data[data.length - 1]}</code>
-  <Sparklines data={data} limit={STRIPCHART_LIMIT} width={1000} height={70} margin={5}>
-    <SparklinesLine color="black" />
-  </Sparklines>
+  <div>
+    <code>{name}: {data[data.length - 1]}</code>
+    <Sparklines data={data} limit={STRIPCHART_LIMIT} width={1000} height={70} margin={5}>
+      <SparklinesLine color="black" />
+    </Sparklines>
+  </div>
 )
 
 Stripchart.propTypes = {
   name: PropTypes.string.isRequired,
-  data: PropTypes.arrayOf(PropTypes.number).isRequired).isRequired,
+  data: PropTypes.arrayOf(PropTypes.number).isRequired,
 }
 
 const Stripcharts = ({ attitudeTelemetry }) => (
@@ -43,12 +45,12 @@ const Stripcharts = ({ attitudeTelemetry }) => (
         name={key}
         data={attitudeTelemetry[key]}
       />
-    )}}
+    })}
   </ul>
 )
 
 Stripcharts.propTypes = {
-  attitudeTelemetry: PropTypes.objectOf(PropTypes.number).isRequired).isRequired,
+  attitudeTelemetry: PropTypes.objectOf(PropTypes.number).isRequired,
 }
 
 const mapStateToProps = (state) => ({

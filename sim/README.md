@@ -1,22 +1,33 @@
 # Simulation Utilities
 
-This is a Makefile that allows easy interaction of the PX4 software sim via docker.
+This is a Makefile that allows easy interaction with the PX4 software sim via a docker contaianer.
 
 ## Setup
 
-Make sure you have docker installed for your platform
+### Linux
+
+Just make make sure you have docker installed!
 
 ### OS X
 
+**Docker for Mac**
+
+This has been tested to work with docker for mac: https://docs.docker.com/docker-for-mac/
+
+**Homebrew**
+
+Make sure you have homebrew installed on your machine [brew.sh/](http://brew.sh/)
+
 **XQuartz**
 
-You need to install and start [XQuartz](https://www.xquartz.org/). This is so it is possible to use the sim's GUI from the container.
+You need to install XQuartz so it is possible to use the sim's GUI from the container.
 
 ```sh
 brew cask install xquartz
 ```
 
-Some default settings need to be changed
+Some default settings need to be changed:
+
 ```sh
 defaults write org.macosforge.xquartz.X11 enable_iglx -bool true
 defaults write org.macosforge.xquartz.X11 nolisten_tcp -bool false

@@ -1,5 +1,6 @@
 PX4_DIR := PX4
-PX4_GIT := git@github.com:PX4/Firmware.git
+PX4_GIT := https://github.com/PX4/Firmware.git
+# PX4_GIT := git@github.com:PX4/Firmware.git
 # PX4_GIT := git@github.com:Stonelinks/Firmware.git
 PX4_BRANCH := master
 # PX4_BRANCH := jMAVSim-fork
